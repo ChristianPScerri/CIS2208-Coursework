@@ -1,35 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F7FAF7"
+    android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".SecondFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <Button
+        android:id="@+id/button_second"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="@string/previous" />
+
+    <TextView
+        android:id="@+id/textview_shopping_list_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/shopping_list_title"
+        android:textColor="#193326"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_second"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/previous"
-            app:layout_constraintBottom_toTopOf="@id/textview_second"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textview_shopping_list_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/shopping_list_sample_note"
+        android:textColor="#4D6659"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/textview_second"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/shopping_list_placeholder"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_second" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+    <EditText
+        android:id="@+id/edittext_search_items"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="18dp"
+        android:autofillHints=""
+        android:background="#FFFFFF"
+        android:hint="@string/shopping_list_search_hint"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:singleLine="true"
+        android:textColor="#26352D"
+        android:textColorHint="#6C7B72" />
+
+    <TextView
+        android:id="@+id/textview_empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="@string/shopping_list_empty"
+        android:textColor="#4D6659"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_shopping_items"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_shopping" />
+
+</LinearLayout>

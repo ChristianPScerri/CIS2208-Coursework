@@ -15,4 +15,8 @@
     <string name="add_item_coming_next">Not yet added</string>
     <string name="previous">Back to home</string>
     <string name="shopping_list_placeholder">Not yet added</string>
+    <string name="shopping_list_title">Shopping List</string>
+    <string name="shopping_list_search_hint">Search items</string>
+    <string name="shopping_list_empty">No matching shopping items</string>
+    <string name="shopping_list_sample_note"></string>
 </resources>

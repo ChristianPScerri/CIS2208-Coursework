@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="#FFFFFF"
+    android:elevation="2dp"
+    android:gravity="center_vertical"
+    android:minHeight="76dp"
+    android:orientation="horizontal"
+    android:padding="14dp">
+
+    <CheckBox
+        android:id="@+id/checkbox_bought"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:buttonTint="#2F7D4B" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#193326"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            tools:text="Milk" />
+
+        <TextView
+            android:id="@+id/textview_item_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#4D6659"
+            android:textSize="14sp"
+            tools:text="2 bottles - Dairy - High priority" />
+
+    </LinearLayout>
+
+</LinearLayout>
