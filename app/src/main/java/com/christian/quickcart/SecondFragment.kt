@@ -9,16 +9,18 @@ import androidx.navigation.fragment.findNavController
 import com.christian.quickcart.databinding.FragmentSecondBinding
 
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * Temporary shopping list fragment that will later host the RecyclerView list.
  */
 class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
+    /**
+     * Creates the shopping list placeholder view using generated view binding.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,6 +31,9 @@ class SecondFragment : Fragment() {
 
     }
 
+    /**
+     * Connects the placeholder back button to the home dashboard.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,6 +42,9 @@ class SecondFragment : Fragment() {
         }
     }
 
+    /**
+     * Clears the view binding reference when the fragment view is destroyed.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
