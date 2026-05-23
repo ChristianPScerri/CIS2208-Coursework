@@ -9,7 +9,8 @@ import com.christian.quickcart.databinding.ItemShoppingBinding
  * RecyclerView adapter that displays QuickCart shopping items.
  */
 class ShoppingListAdapter(
-    private var items: List<ShoppingItem>
+    private var items: List<ShoppingItem>,
+    private val onBoughtChanged: (ShoppingItem, Boolean) -> Unit
 ) : RecyclerView.Adapter<ShoppingListAdapter.ShoppingItemViewHolder>() {
 
     /**
@@ -28,7 +29,7 @@ class ShoppingListAdapter(
      * Binds the item data at the requested position to the row controls.
      */
     override fun onBindViewHolder(holder: ShoppingItemViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], onBoughtChanged)
     }
 
     /**
@@ -52,9 +53,9 @@ class ShoppingListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         /**
-         * Shows item text and stores the bought checkbox state.
+         * Shows item text and sends checkbox changes back to the fragment.
          */
-        fun bind(item: ShoppingItem) {
+        fun bind(item: ShoppingItem, onBoughtChanged: (ShoppingItem, Boolean) -> Unit) {
             binding.textviewItemName.text = item.name
             binding.textviewItemDetails.text =
                 "${item.quantity} - ${item.category} - ${item.priority} priority"
@@ -62,6 +63,7 @@ class ShoppingListAdapter(
             binding.checkboxBought.isChecked = item.isBought
             binding.checkboxBought.setOnCheckedChangeListener { _, isChecked ->
                 item.isBought = isChecked
+                onBoughtChanged(item, isChecked)
             }
         }
     }

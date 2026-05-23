@@ -16,13 +16,8 @@ class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     private lateinit var shoppingListAdapter: ShoppingListAdapter
-    private val shoppingItems = listOf(
-        ShoppingItem("Milk", "2 bottles", "Dairy", "High"),
-        ShoppingItem("Bread", "1 loaf", "Bakery", "Medium"),
-        ShoppingItem("Apples", "6 pieces", "Fruit", "Low"),
-        ShoppingItem("Pasta", "2 packs", "Pantry", "Medium"),
-        ShoppingItem("Tomatoes", "4 cans", "Pantry", "High")
-    )
+    private lateinit var databaseHelper: ShoppingDatabaseHelper
+    private var shoppingItems = listOf<ShoppingItem>()
 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
@@ -46,7 +41,13 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        shoppingListAdapter = ShoppingListAdapter(shoppingItems)
+        databaseHelper = ShoppingDatabaseHelper(requireContext())
+        databaseHelper.seedSampleItemsIfEmpty()
+        shoppingItems = databaseHelper.getAllShoppingItems()
+
+        shoppingListAdapter = ShoppingListAdapter(shoppingItems) { item, isBought ->
+            databaseHelper.updateBoughtStatus(item.id, isBought)
+        }
         binding.recyclerviewShoppingItems.adapter = shoppingListAdapter
 
         binding.buttonSecond.setOnClickListener {

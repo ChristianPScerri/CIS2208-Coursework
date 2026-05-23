@@ -18,5 +18,5 @@
     <string name="shopping_list_title">Shopping List</string>
     <string name="shopping_list_search_hint">Search items</string>
     <string name="shopping_list_empty">No matching shopping items</string>
-    <string name="shopping_list_sample_note"></string>
+    <string name="shopping_list_sample_note">Items are saved locally on this device</string>
 </resources>
