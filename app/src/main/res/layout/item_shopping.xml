@@ -6,41 +6,70 @@
     android:layout_marginBottom="10dp"
     android:background="#FFFFFF"
     android:elevation="2dp"
-    android:gravity="center_vertical"
     android:minHeight="76dp"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="14dp">
 
-    <CheckBox
-        android:id="@+id/checkbox_bought"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:buttonTint="#2F7D4B" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/checkbox_bought"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:buttonTint="#2F7D4B" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textview_item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#193326"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:text="Milk" />
+
+            <TextView
+                android:id="@+id/textview_item_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="#4D6659"
+                android:textSize="14sp"
+                tools:text="2 bottles - Dairy - High priority" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_marginTop="10dp"
+        android:gravity="end"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textview_item_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#193326"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            tools:text="Milk" />
+        <Button
+            android:id="@+id/button_edit_item"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="@string/edit_item" />
 
-        <TextView
-            android:id="@+id/textview_item_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="#4D6659"
-            android:textSize="14sp"
-            tools:text="2 bottles - Dairy - High priority" />
+        <Button
+            android:id="@+id/button_delete_item"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/delete_item" />
 
     </LinearLayout>
 

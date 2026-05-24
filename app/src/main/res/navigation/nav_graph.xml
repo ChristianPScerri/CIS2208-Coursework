@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_PantryFragment"
+            app:destination="@id/PantryFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -30,4 +33,9 @@
         android:name="com.christian.quickcart.AddItemFragment"
         android:label="@string/add_item_fragment_label"
         tools:layout="@layout/fragment_add_item" />
+    <fragment
+        android:id="@+id/PantryFragment"
+        android:name="com.christian.quickcart.PantryFragment"
+        android:label="@string/pantry_fragment_label"
+        tools:layout="@layout/fragment_pantry" />
 </navigation>

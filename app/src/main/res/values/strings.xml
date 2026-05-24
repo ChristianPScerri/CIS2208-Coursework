@@ -21,15 +21,26 @@
     <string name="shopping_list_sample_note">Items are saved locally on this device</string>
     <string name="add_item_fragment_label">Add Item</string>
     <string name="add_item_title">Add shopping item</string>
+    <string name="edit_item_title">Edit shopping item</string>
     <string name="item_name_hint">Item name</string>
     <string name="item_quantity_hint">Quantity</string>
     <string name="item_category_hint">Category</string>
     <string name="item_priority_hint">Priority</string>
     <string name="item_notes_hint">Notes</string>
     <string name="save_item">Save item</string>
+    <string name="update_item">Update item</string>
     <string name="item_saved">Item saved</string>
+    <string name="item_updated">Item updated</string>
+    <string name="item_deleted">Item deleted</string>
     <string name="item_name_required">Please enter an item name</string>
     <string name="quantity_default">1 item</string>
     <string name="category_default">General</string>
     <string name="priority_default">Medium</string>
+    <string name="edit_item">Edit</string>
+    <string name="delete_item">Delete</string>
+    <string name="pantry_fragment_label">Pantry</string>
+    <string name="pantry_title">Pantry</string>
+    <string name="pantry_subtitle"></string>
+    <string name="pantry_placeholder_title"></string>
+    <string name="pantry_placeholder_body"></string>
 </resources>

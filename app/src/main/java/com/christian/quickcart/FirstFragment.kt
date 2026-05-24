@@ -42,11 +42,7 @@ class FirstFragment : Fragment() {
         }
 
         binding.buttonOpenPantry.setOnClickListener {
-            com.google.android.material.snackbar.Snackbar.make(
-                view,
-                R.string.feature_coming_next,
-                com.google.android.material.snackbar.Snackbar.LENGTH_LONG
-            ).show()
+            findNavController().navigate(R.id.action_FirstFragment_to_PantryFragment)
         }
 
         binding.buttonOpenRecipes.setOnClickListener {

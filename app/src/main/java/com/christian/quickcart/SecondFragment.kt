@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.christian.quickcart.databinding.FragmentSecondBinding
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Shopping list fragment that displays sample items in a RecyclerView.
@@ -45,9 +46,18 @@ class SecondFragment : Fragment() {
         databaseHelper.seedSampleItemsIfEmpty()
         shoppingItems = databaseHelper.getAllShoppingItems()
 
-        shoppingListAdapter = ShoppingListAdapter(shoppingItems) { item, isBought ->
-            databaseHelper.updateBoughtStatus(item.id, isBought)
-        }
+        shoppingListAdapter = ShoppingListAdapter(
+            shoppingItems,
+            onBoughtChanged = { item, isBought ->
+                databaseHelper.updateBoughtStatus(item.id, isBought)
+            },
+            onEditClicked = { item ->
+                openEditItemScreen(item)
+            },
+            onDeleteClicked = { item ->
+                deleteShoppingItem(item)
+            }
+        )
         binding.recyclerviewShoppingItems.adapter = shoppingListAdapter
 
         binding.buttonSecond.setOnClickListener {
@@ -82,6 +92,26 @@ class SecondFragment : Fragment() {
         shoppingListAdapter.submitItems(filteredItems)
         binding.textviewEmptyList.visibility =
             if (filteredItems.isEmpty()) View.VISIBLE else View.GONE
+    }
+
+    /**
+     * Opens the add item form in edit mode for the selected shopping item.
+     */
+    private fun openEditItemScreen(item: ShoppingItem) {
+        val arguments = Bundle().apply {
+            putLong(AddItemFragment.ARG_ITEM_ID, item.id)
+        }
+        findNavController().navigate(R.id.AddItemFragment, arguments)
+    }
+
+    /**
+     * Deletes the selected shopping item and refreshes the visible list.
+     */
+    private fun deleteShoppingItem(item: ShoppingItem) {
+        databaseHelper.deleteShoppingItem(item.id)
+        shoppingItems = databaseHelper.getAllShoppingItems()
+        filterShoppingItems(binding.edittextSearchItems.text.toString())
+        Snackbar.make(binding.root, R.string.item_deleted, Snackbar.LENGTH_SHORT).show()
     }
 
     /**

@@ -113,6 +113,75 @@ class ShoppingDatabaseHelper(context: Context) :
     }
 
     /**
+     * Reads one shopping item by id so the edit form can be pre-filled.
+     */
+    fun getShoppingItemById(itemId: Long): ShoppingItem? {
+        val cursor = readableDatabase.query(
+            TABLE_SHOPPING_ITEMS,
+            null,
+            "$COLUMN_ID = ?",
+            arrayOf(itemId.toString()),
+            null,
+            null,
+            null
+        )
+
+        cursor.use {
+            return if (it.moveToFirst()) {
+                ShoppingItem(
+                    id = it.getLong(it.getColumnIndexOrThrow(COLUMN_ID)),
+                    name = it.getString(it.getColumnIndexOrThrow(COLUMN_NAME)),
+                    quantity = it.getString(it.getColumnIndexOrThrow(COLUMN_QUANTITY)),
+                    category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    priority = it.getString(it.getColumnIndexOrThrow(COLUMN_PRIORITY)),
+                    notes = it.getString(it.getColumnIndexOrThrow(COLUMN_NOTES)),
+                    isBought = it.getInt(it.getColumnIndexOrThrow(COLUMN_IS_BOUGHT)) == 1
+                )
+            } else {
+                null
+            }
+        }
+    }
+
+    /**
+     * Updates the editable details for an existing shopping item.
+     */
+    fun updateShoppingItem(
+        itemId: Long,
+        name: String,
+        quantity: String,
+        category: String,
+        priority: String,
+        notes: String
+    ) {
+        val values = ContentValues().apply {
+            put(COLUMN_NAME, name)
+            put(COLUMN_QUANTITY, quantity)
+            put(COLUMN_CATEGORY, category)
+            put(COLUMN_PRIORITY, priority)
+            put(COLUMN_NOTES, notes)
+        }
+
+        writableDatabase.update(
+            TABLE_SHOPPING_ITEMS,
+            values,
+            "$COLUMN_ID = ?",
+            arrayOf(itemId.toString())
+        )
+    }
+
+    /**
+     * Deletes a shopping item from the local database.
+     */
+    fun deleteShoppingItem(itemId: Long) {
+        writableDatabase.delete(
+            TABLE_SHOPPING_ITEMS,
+            "$COLUMN_ID = ?",
+            arrayOf(itemId.toString())
+        )
+    }
+
+    /**
      * Saves whether a shopping item has been bought.
      */
     fun updateBoughtStatus(itemId: Long, isBought: Boolean) {

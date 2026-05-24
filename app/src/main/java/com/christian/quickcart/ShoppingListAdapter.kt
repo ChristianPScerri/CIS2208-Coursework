@@ -10,7 +10,9 @@ import com.christian.quickcart.databinding.ItemShoppingBinding
  */
 class ShoppingListAdapter(
     private var items: List<ShoppingItem>,
-    private val onBoughtChanged: (ShoppingItem, Boolean) -> Unit
+    private val onBoughtChanged: (ShoppingItem, Boolean) -> Unit,
+    private val onEditClicked: (ShoppingItem) -> Unit,
+    private val onDeleteClicked: (ShoppingItem) -> Unit
 ) : RecyclerView.Adapter<ShoppingListAdapter.ShoppingItemViewHolder>() {
 
     /**
@@ -29,7 +31,7 @@ class ShoppingListAdapter(
      * Binds the item data at the requested position to the row controls.
      */
     override fun onBindViewHolder(holder: ShoppingItemViewHolder, position: Int) {
-        holder.bind(items[position], onBoughtChanged)
+        holder.bind(items[position], onBoughtChanged, onEditClicked, onDeleteClicked)
     }
 
     /**
@@ -55,7 +57,12 @@ class ShoppingListAdapter(
         /**
          * Shows item text and sends checkbox changes back to the fragment.
          */
-        fun bind(item: ShoppingItem, onBoughtChanged: (ShoppingItem, Boolean) -> Unit) {
+        fun bind(
+            item: ShoppingItem,
+            onBoughtChanged: (ShoppingItem, Boolean) -> Unit,
+            onEditClicked: (ShoppingItem) -> Unit,
+            onDeleteClicked: (ShoppingItem) -> Unit
+        ) {
             binding.textviewItemName.text = item.name
             binding.textviewItemDetails.text = buildItemDetails(item)
             binding.checkboxBought.setOnCheckedChangeListener(null)
@@ -63,6 +70,12 @@ class ShoppingListAdapter(
             binding.checkboxBought.setOnCheckedChangeListener { _, isChecked ->
                 item.isBought = isChecked
                 onBoughtChanged(item, isChecked)
+            }
+            binding.buttonEditItem.setOnClickListener {
+                onEditClicked(item)
+            }
+            binding.buttonDeleteItem.setOnClickListener {
+                onDeleteClicked(item)
             }
         }
 

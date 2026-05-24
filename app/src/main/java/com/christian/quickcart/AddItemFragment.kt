@@ -17,6 +17,7 @@ class AddItemFragment : Fragment() {
     private var _binding: FragmentAddItemBinding? = null
     private val binding get() = _binding!!
     private lateinit var databaseHelper: ShoppingDatabaseHelper
+    private var editingItemId: Long = NO_ITEM_ID
 
     /**
      * Creates the add item form view using generated view binding.
@@ -37,9 +38,30 @@ class AddItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         databaseHelper = ShoppingDatabaseHelper(requireContext())
+        editingItemId = arguments?.getLong(ARG_ITEM_ID, NO_ITEM_ID) ?: NO_ITEM_ID
+
+        if (editingItemId != NO_ITEM_ID) {
+            loadShoppingItemForEditing(editingItemId)
+        }
+
         binding.buttonSaveItem.setOnClickListener {
             saveShoppingItem()
         }
+    }
+
+    /**
+     * Loads an existing shopping item into the form for editing.
+     */
+    private fun loadShoppingItemForEditing(itemId: Long) {
+        val item = databaseHelper.getShoppingItemById(itemId) ?: return
+
+        binding.textviewAddItemTitle.setText(R.string.edit_item_title)
+        binding.buttonSaveItem.setText(R.string.update_item)
+        binding.edittextItemName.setText(item.name)
+        binding.edittextItemQuantity.setText(item.quantity)
+        binding.edittextItemCategory.setText(item.category)
+        binding.edittextItemPriority.setText(item.priority)
+        binding.edittextItemNotes.setText(item.notes)
     }
 
     /**
@@ -61,8 +83,14 @@ class AddItemFragment : Fragment() {
             .ifEmpty { getString(R.string.priority_default) }
         val notes = binding.edittextItemNotes.text.toString().trim()
 
-        databaseHelper.insertShoppingItem(name, quantity, category, priority, notes)
-        Snackbar.make(binding.root, R.string.item_saved, Snackbar.LENGTH_SHORT).show()
+        if (editingItemId == NO_ITEM_ID) {
+            databaseHelper.insertShoppingItem(name, quantity, category, priority, notes)
+            Snackbar.make(binding.root, R.string.item_saved, Snackbar.LENGTH_SHORT).show()
+        } else {
+            databaseHelper.updateShoppingItem(editingItemId, name, quantity, category, priority, notes)
+            Snackbar.make(binding.root, R.string.item_updated, Snackbar.LENGTH_SHORT).show()
+        }
+
         findNavController().popBackStack()
     }
 
@@ -72,5 +100,10 @@ class AddItemFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val ARG_ITEM_ID = "item_id"
+        private const val NO_ITEM_ID = -1L
     }
 }
