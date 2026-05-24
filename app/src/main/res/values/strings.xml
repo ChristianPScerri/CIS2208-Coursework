@@ -7,7 +7,7 @@
     <string name="home_subtitle"></string>
     <string name="home_status_title">Summary</string>
     <string name="home_status_body"></string>
-    <string name="open_shopping_list">New Shopping List</string>
+    <string name="open_shopping_list">Shopping List</string>
     <string name="open_pantry">Pantry</string>
     <string name="open_recipes">Recipes</string>
     <string name="add_item">Add item</string>
@@ -19,4 +19,17 @@
     <string name="shopping_list_search_hint">Search items</string>
     <string name="shopping_list_empty">No matching shopping items</string>
     <string name="shopping_list_sample_note">Items are saved locally on this device</string>
+    <string name="add_item_fragment_label">Add Item</string>
+    <string name="add_item_title">Add shopping item</string>
+    <string name="item_name_hint">Item name</string>
+    <string name="item_quantity_hint">Quantity</string>
+    <string name="item_category_hint">Category</string>
+    <string name="item_priority_hint">Priority</string>
+    <string name="item_notes_hint">Notes</string>
+    <string name="save_item">Save item</string>
+    <string name="item_saved">Item saved</string>
+    <string name="item_name_required">Please enter an item name</string>
+    <string name="quantity_default">1 item</string>
+    <string name="category_default">General</string>
+    <string name="priority_default">Medium</string>
 </resources>

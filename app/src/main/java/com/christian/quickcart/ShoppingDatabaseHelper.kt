@@ -23,6 +23,7 @@ class ShoppingDatabaseHelper(context: Context) :
                 $COLUMN_QUANTITY TEXT NOT NULL,
                 $COLUMN_CATEGORY TEXT NOT NULL,
                 $COLUMN_PRIORITY TEXT NOT NULL,
+                $COLUMN_NOTES TEXT NOT NULL DEFAULT '',
                 $COLUMN_IS_BOUGHT INTEGER NOT NULL DEFAULT 0
             )
             """.trimIndent()
@@ -46,11 +47,11 @@ class ShoppingDatabaseHelper(context: Context) :
 
         cursor.use {
             if (it.moveToFirst() && it.getInt(0) == 0) {
-                insertShoppingItem("Milk", "2 bottles", "Dairy", "High")
-                insertShoppingItem("Bread", "1 loaf", "Bakery", "Medium")
-                insertShoppingItem("Apples", "6 pieces", "Fruit", "Low")
-                insertShoppingItem("Pasta", "2 packs", "Pantry", "Medium")
-                insertShoppingItem("Tomatoes", "4 cans", "Pantry", "High")
+                insertShoppingItem("Milk", "2 bottles", "Dairy", "High", "Check expiry date")
+                insertShoppingItem("Bread", "1 loaf", "Bakery", "Medium", "")
+                insertShoppingItem("Apples", "6 pieces", "Fruit", "Low", "Any variety is fine")
+                insertShoppingItem("Pasta", "2 packs", "Pantry", "Medium", "")
+                insertShoppingItem("Tomatoes", "4 cans", "Pantry", "High", "For sauce")
             }
         }
     }
@@ -62,13 +63,15 @@ class ShoppingDatabaseHelper(context: Context) :
         name: String,
         quantity: String,
         category: String,
-        priority: String
+        priority: String,
+        notes: String
     ): Long {
         val values = ContentValues().apply {
             put(COLUMN_NAME, name)
             put(COLUMN_QUANTITY, quantity)
             put(COLUMN_CATEGORY, category)
             put(COLUMN_PRIORITY, priority)
+            put(COLUMN_NOTES, notes)
             put(COLUMN_IS_BOUGHT, 0)
         }
 
@@ -99,6 +102,7 @@ class ShoppingDatabaseHelper(context: Context) :
                         quantity = it.getString(it.getColumnIndexOrThrow(COLUMN_QUANTITY)),
                         category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
                         priority = it.getString(it.getColumnIndexOrThrow(COLUMN_PRIORITY)),
+                        notes = it.getString(it.getColumnIndexOrThrow(COLUMN_NOTES)),
                         isBought = it.getInt(it.getColumnIndexOrThrow(COLUMN_IS_BOUGHT)) == 1
                     )
                 )
@@ -126,7 +130,7 @@ class ShoppingDatabaseHelper(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "quickcart.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         private const val TABLE_SHOPPING_ITEMS = "shopping_items"
         private const val COLUMN_ID = "id"
@@ -134,6 +138,7 @@ class ShoppingDatabaseHelper(context: Context) :
         private const val COLUMN_QUANTITY = "quantity"
         private const val COLUMN_CATEGORY = "category"
         private const val COLUMN_PRIORITY = "priority"
+        private const val COLUMN_NOTES = "notes"
         private const val COLUMN_IS_BOUGHT = "is_bought"
     }
 }

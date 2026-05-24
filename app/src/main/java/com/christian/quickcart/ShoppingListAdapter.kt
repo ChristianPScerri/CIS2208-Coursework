@@ -57,14 +57,21 @@ class ShoppingListAdapter(
          */
         fun bind(item: ShoppingItem, onBoughtChanged: (ShoppingItem, Boolean) -> Unit) {
             binding.textviewItemName.text = item.name
-            binding.textviewItemDetails.text =
-                "${item.quantity} - ${item.category} - ${item.priority} priority"
+            binding.textviewItemDetails.text = buildItemDetails(item)
             binding.checkboxBought.setOnCheckedChangeListener(null)
             binding.checkboxBought.isChecked = item.isBought
             binding.checkboxBought.setOnCheckedChangeListener { _, isChecked ->
                 item.isBought = isChecked
                 onBoughtChanged(item, isChecked)
             }
+        }
+
+        /**
+         * Builds the second line of text for a shopping item row.
+         */
+        private fun buildItemDetails(item: ShoppingItem): String {
+            val mainDetails = "${item.quantity} - ${item.category} - ${item.priority} priority"
+            return if (item.notes.isBlank()) mainDetails else "$mainDetails - ${item.notes}"
         }
     }
 }

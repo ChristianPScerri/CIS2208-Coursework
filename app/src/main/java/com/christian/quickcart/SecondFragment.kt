@@ -60,6 +60,17 @@ class SecondFragment : Fragment() {
     }
 
     /**
+     * Reloads saved items when the user returns from the Add Item screen.
+     */
+    override fun onResume() {
+        super.onResume()
+        if (::databaseHelper.isInitialized && ::shoppingListAdapter.isInitialized) {
+            shoppingItems = databaseHelper.getAllShoppingItems()
+            filterShoppingItems(binding.edittextSearchItems.text.toString())
+        }
+    }
+
+    /**
      * Filters the sample shopping items by name or category and updates the empty state.
      */
     private fun filterShoppingItems(searchText: String) {

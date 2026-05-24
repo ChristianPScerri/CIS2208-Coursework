@@ -9,5 +9,6 @@ data class ShoppingItem(
     val quantity: String,
     val category: String,
     val priority: String,
+    val notes: String,
     var isBought: Boolean = false
 )
