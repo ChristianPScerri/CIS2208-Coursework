@@ -38,4 +38,9 @@
         android:name="com.christian.quickcart.PantryFragment"
         android:label="@string/pantry_fragment_label"
         tools:layout="@layout/fragment_pantry" />
+    <fragment
+        android:id="@+id/AddPantryItemFragment"
+        android:name="com.christian.quickcart.AddPantryItemFragment"
+        android:label="@string/add_pantry_fragment_label"
+        tools:layout="@layout/fragment_add_pantry_item" />
 </navigation>

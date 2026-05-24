@@ -1,60 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7FAF7"
+    android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".PantryFragment">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textview_pantry_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:text="@string/pantry_title"
+        android:textColor="#193326"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textview_pantry_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/pantry_title"
-            android:textColor="#193326"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textview_pantry_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/pantry_subtitle"
+        android:textColor="#4D6659"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/textview_pantry_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/pantry_subtitle"
-            android:textColor="#4D6659"
-            android:textSize="16sp" />
+    <EditText
+        android:id="@+id/edittext_search_pantry"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="18dp"
+        android:autofillHints=""
+        android:background="#FFFFFF"
+        android:hint="@string/pantry_search_hint"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:singleLine="true"
+        android:textColor="#26352D"
+        android:textColorHint="#6C7B72" />
 
-        <TextView
-            android:id="@+id/textview_pantry_placeholder_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="#FFFFFF"
-            android:elevation="2dp"
-            android:padding="20dp"
-            android:text="@string/pantry_placeholder_title"
-            android:textColor="#193326"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/textview_empty_pantry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="@string/pantry_empty"
+        android:textColor="#4D6659"
+        android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/textview_pantry_placeholder_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:lineSpacingExtra="5dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="20dp"
-            android:text="@string/pantry_placeholder_body"
-            android:textColor="#4D6659"
-            android:textSize="15sp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_pantry_items"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_pantry" />
 
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</LinearLayout>

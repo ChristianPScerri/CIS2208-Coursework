@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7FAF7"
+    tools:context=".AddPantryItemFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/textview_add_pantry_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_pantry_item_title"
+            android:textColor="#193326"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edittext_pantry_name"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:background="#FFFFFF"
+            android:hint="@string/pantry_item_name_hint"
+            android:inputType="textCapWords"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:textColor="#26352D"
+            android:textColorHint="#6C7B72" />
+
+        <EditText
+            android:id="@+id/edittext_pantry_quantity"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:background="#FFFFFF"
+            android:hint="@string/pantry_quantity_hint"
+            android:inputType="textCapWords"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:textColor="#26352D"
+            android:textColorHint="#6C7B72" />
+
+        <EditText
+            android:id="@+id/edittext_pantry_category"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:background="#FFFFFF"
+            android:hint="@string/pantry_category_hint"
+            android:inputType="textCapWords"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:textColor="#26352D"
+            android:textColorHint="#6C7B72" />
+
+        <EditText
+            android:id="@+id/edittext_pantry_expiry"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:background="#FFFFFF"
+            android:hint="@string/pantry_expiry_hint"
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:textColor="#26352D"
+            android:textColorHint="#6C7B72" />
+
+        <Button
+            android:id="@+id/button_save_pantry_item"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/save_pantry_item" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

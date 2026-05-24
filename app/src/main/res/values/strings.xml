@@ -41,6 +41,23 @@
     <string name="pantry_fragment_label">Pantry</string>
     <string name="pantry_title">Pantry</string>
     <string name="pantry_subtitle"></string>
-    <string name="pantry_placeholder_title"></string>
-    <string name="pantry_placeholder_body"></string>
+    <string name="pantry_empty">No pantry items saved yet</string>
+    <string name="pantry_search_hint">Search pantry</string>
+    <string name="add_pantry_fragment_label">Add Pantry Item</string>
+    <string name="add_pantry_item_title">Add pantry item</string>
+    <string name="edit_pantry_item_title">Edit pantry item</string>
+    <string name="pantry_item_name_hint">Pantry item name</string>
+    <string name="pantry_quantity_hint">Quantity</string>
+    <string name="pantry_category_hint">Category</string>
+    <string name="pantry_expiry_hint">Expiry date</string>
+    <string name="save_pantry_item">Save pantry item</string>
+    <string name="update_pantry_item">Update pantry item</string>
+    <string name="pantry_item_saved">Pantry item saved</string>
+    <string name="pantry_item_updated">Pantry item updated</string>
+    <string name="pantry_item_deleted">Pantry item deleted</string>
+    <string name="pantry_item_name_required">Please enter a pantry item name</string>
+    <string name="expiry_default">No expiry set</string>
+    <string name="bottom_home">Home</string>
+    <string name="bottom_shopping">Shopping</string>
+    <string name="bottom_pantry">Pantry</string>
 </resources>

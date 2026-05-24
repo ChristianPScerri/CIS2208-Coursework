@@ -6,6 +6,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.christian.quickcart.databinding.ActivityMainBinding
@@ -30,12 +31,17 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.FirstFragment, R.id.SecondFragment, R.id.PantryFragment)
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.contentMain.bottomNavigation.setupWithNavController(navController)
 
         binding.fab.setOnClickListener {
-            if (navController.currentDestination?.id != R.id.AddItemFragment) {
-                navController.navigate(R.id.AddItemFragment)
+            when (navController.currentDestination?.id) {
+                R.id.PantryFragment -> navController.navigate(R.id.AddPantryItemFragment)
+                R.id.AddItemFragment, R.id.AddPantryItemFragment -> Unit
+                else -> navController.navigate(R.id.AddItemFragment)
             }
         }
     }

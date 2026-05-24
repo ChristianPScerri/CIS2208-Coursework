@@ -28,14 +28,38 @@ class ShoppingDatabaseHelper(context: Context) :
             )
             """.trimIndent()
         )
+        createPantryTable(db)
     }
 
     /**
      * Rebuilds the database if the schema version changes during development.
      */
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_SHOPPING_ITEMS")
-        onCreate(db)
+        if (oldVersion < 2) {
+            db.execSQL(
+                "ALTER TABLE $TABLE_SHOPPING_ITEMS ADD COLUMN $COLUMN_NOTES TEXT NOT NULL DEFAULT ''"
+            )
+        }
+        if (oldVersion < 3) {
+            createPantryTable(db)
+        }
+    }
+
+    /**
+     * Creates the pantry item table used by the Pantry screen.
+     */
+    private fun createPantryTable(db: SQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS $TABLE_PANTRY_ITEMS (
+                $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COLUMN_NAME TEXT NOT NULL,
+                $COLUMN_QUANTITY TEXT NOT NULL,
+                $COLUMN_CATEGORY TEXT NOT NULL,
+                $COLUMN_EXPIRY_DATE TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
     }
 
     /**
@@ -182,6 +206,122 @@ class ShoppingDatabaseHelper(context: Context) :
     }
 
     /**
+     * Inserts one pantry item into local SQLite storage.
+     */
+    fun insertPantryItem(
+        name: String,
+        quantity: String,
+        category: String,
+        expiryDate: String
+    ): Long {
+        val values = ContentValues().apply {
+            put(COLUMN_NAME, name)
+            put(COLUMN_QUANTITY, quantity)
+            put(COLUMN_CATEGORY, category)
+            put(COLUMN_EXPIRY_DATE, expiryDate)
+        }
+
+        return writableDatabase.insert(TABLE_PANTRY_ITEMS, null, values)
+    }
+
+    /**
+     * Reads all saved pantry items in the order they were added.
+     */
+    fun getAllPantryItems(): List<PantryItem> {
+        val items = mutableListOf<PantryItem>()
+        val cursor = readableDatabase.query(
+            TABLE_PANTRY_ITEMS,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "$COLUMN_ID ASC"
+        )
+
+        cursor.use {
+            while (it.moveToNext()) {
+                items.add(
+                    PantryItem(
+                        id = it.getLong(it.getColumnIndexOrThrow(COLUMN_ID)),
+                        name = it.getString(it.getColumnIndexOrThrow(COLUMN_NAME)),
+                        quantity = it.getString(it.getColumnIndexOrThrow(COLUMN_QUANTITY)),
+                        category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                        expiryDate = it.getString(it.getColumnIndexOrThrow(COLUMN_EXPIRY_DATE))
+                    )
+                )
+            }
+        }
+
+        return items
+    }
+
+    /**
+     * Reads one pantry item by id so the pantry form can be pre-filled.
+     */
+    fun getPantryItemById(itemId: Long): PantryItem? {
+        val cursor = readableDatabase.query(
+            TABLE_PANTRY_ITEMS,
+            null,
+            "$COLUMN_ID = ?",
+            arrayOf(itemId.toString()),
+            null,
+            null,
+            null
+        )
+
+        cursor.use {
+            return if (it.moveToFirst()) {
+                PantryItem(
+                    id = it.getLong(it.getColumnIndexOrThrow(COLUMN_ID)),
+                    name = it.getString(it.getColumnIndexOrThrow(COLUMN_NAME)),
+                    quantity = it.getString(it.getColumnIndexOrThrow(COLUMN_QUANTITY)),
+                    category = it.getString(it.getColumnIndexOrThrow(COLUMN_CATEGORY)),
+                    expiryDate = it.getString(it.getColumnIndexOrThrow(COLUMN_EXPIRY_DATE))
+                )
+            } else {
+                null
+            }
+        }
+    }
+
+    /**
+     * Updates an existing pantry item in the local database.
+     */
+    fun updatePantryItem(
+        itemId: Long,
+        name: String,
+        quantity: String,
+        category: String,
+        expiryDate: String
+    ) {
+        val values = ContentValues().apply {
+            put(COLUMN_NAME, name)
+            put(COLUMN_QUANTITY, quantity)
+            put(COLUMN_CATEGORY, category)
+            put(COLUMN_EXPIRY_DATE, expiryDate)
+        }
+
+        writableDatabase.update(
+            TABLE_PANTRY_ITEMS,
+            values,
+            "$COLUMN_ID = ?",
+            arrayOf(itemId.toString())
+        )
+    }
+
+    /**
+     * Deletes a pantry item from the local database.
+     */
+    fun deletePantryItem(itemId: Long) {
+        writableDatabase.delete(
+            TABLE_PANTRY_ITEMS,
+            "$COLUMN_ID = ?",
+            arrayOf(itemId.toString())
+        )
+    }
+
+    /**
      * Saves whether a shopping item has been bought.
      */
     fun updateBoughtStatus(itemId: Long, isBought: Boolean) {
@@ -199,9 +339,10 @@ class ShoppingDatabaseHelper(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "quickcart.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3
 
         private const val TABLE_SHOPPING_ITEMS = "shopping_items"
+        private const val TABLE_PANTRY_ITEMS = "pantry_items"
         private const val COLUMN_ID = "id"
         private const val COLUMN_NAME = "name"
         private const val COLUMN_QUANTITY = "quantity"
@@ -209,5 +350,6 @@ class ShoppingDatabaseHelper(context: Context) :
         private const val COLUMN_PRIORITY = "priority"
         private const val COLUMN_NOTES = "notes"
         private const val COLUMN_IS_BOUGHT = "is_bought"
+        private const val COLUMN_EXPIRY_DATE = "expiry_date"
     }
 }
