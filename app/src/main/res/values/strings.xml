@@ -60,4 +60,20 @@
     <string name="bottom_home">Home</string>
     <string name="bottom_shopping">Shopping</string>
     <string name="bottom_pantry">Pantry</string>
+    <string name="share_shopping_list">Share list</string>
+    <string name="share_empty_list">There are no shopping items to share</string>
+    <string name="share_chooser_title">Share shopping list</string>
+    <string name="recipes_fragment_label">Recipes</string>
+    <string name="recipes_title">Recipes</string>
+    <string name="recipes_subtitle">Suggestions are based on the first pantry ingredient saved on this device.</string>
+    <string name="fetch_recipes">Get recipe suggestions</string>
+    <string name="recipes_empty">No recipes loaded yet</string>
+    <string name="recipes_no_pantry">Add pantry items first so QuickCart can search for recipes.</string>
+    <string name="recipes_loading">Loading recipe suggestions...</string>
+    <string name="recipes_error">Could not load recipes. Check the connection and try again.</string>
+    <string name="receipt_image_title">Receipt or product image</string>
+    <string name="choose_gallery_image">Choose from gallery</string>
+    <string name="take_camera_photo">Take photo</string>
+    <string name="image_selected">Image selected</string>
+    <string name="no_image_selected">No image selected yet</string>
 </resources>

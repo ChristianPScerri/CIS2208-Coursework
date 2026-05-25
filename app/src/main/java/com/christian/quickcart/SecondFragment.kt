@@ -1,5 +1,6 @@
 package com.christian.quickcart
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -37,7 +38,7 @@ class SecondFragment : Fragment() {
     }
 
     /**
-     * Connects the placeholder back button to the home dashboard.
+     * Loads shopping items and connects search, share, edit, and delete actions.
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,12 +61,12 @@ class SecondFragment : Fragment() {
         )
         binding.recyclerviewShoppingItems.adapter = shoppingListAdapter
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }
-
         binding.edittextSearchItems.addTextChangedListener { searchText ->
             filterShoppingItems(searchText.toString())
+        }
+
+        binding.buttonShareShoppingList.setOnClickListener {
+            shareShoppingList()
         }
     }
 
@@ -112,6 +113,32 @@ class SecondFragment : Fragment() {
         shoppingItems = databaseHelper.getAllShoppingItems()
         filterShoppingItems(binding.edittextSearchItems.text.toString())
         Snackbar.make(binding.root, R.string.item_deleted, Snackbar.LENGTH_SHORT).show()
+    }
+
+    /**
+     * Shares the saved shopping list through Android's share sheet.
+     */
+    private fun shareShoppingList() {
+        val items = databaseHelper.getAllShoppingItems()
+
+        if (items.isEmpty()) {
+            Snackbar.make(binding.root, R.string.share_empty_list, Snackbar.LENGTH_SHORT).show()
+            return
+        }
+
+        val listText = items.joinToString(separator = "\n") { item ->
+            val boughtText = if (item.isBought) "Bought" else "Needed"
+            "- ${item.name} (${item.quantity}, ${item.category}, $boughtText)"
+        }
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.shopping_list_title))
+            putExtra(Intent.EXTRA_TEXT, listText)
+        }
+        startActivity(
+            Intent.createChooser(shareIntent, getString(R.string.share_chooser_title))
+        )
     }
 
     /**

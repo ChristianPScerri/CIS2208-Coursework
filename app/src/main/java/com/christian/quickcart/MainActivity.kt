@@ -3,10 +3,10 @@ package com.christian.quickcart
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.NavOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.christian.quickcart.databinding.ActivityMainBinding
@@ -35,14 +35,47 @@ class MainActivity : AppCompatActivity() {
             setOf(R.id.FirstFragment, R.id.SecondFragment, R.id.PantryFragment)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        binding.contentMain.bottomNavigation.setupWithNavController(navController)
+        setupBottomNavigation()
 
         binding.fab.setOnClickListener {
             when (navController.currentDestination?.id) {
                 R.id.PantryFragment -> navController.navigate(R.id.AddPantryItemFragment)
-                R.id.AddItemFragment, R.id.AddPantryItemFragment -> Unit
+                R.id.AddItemFragment, R.id.AddPantryItemFragment, R.id.RecipesFragment -> Unit
                 else -> navController.navigate(R.id.AddItemFragment)
             }
+        }
+    }
+
+    /**
+     * Handles bottom navigation explicitly so each tab always opens the expected main screen.
+     */
+    private fun setupBottomNavigation() {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        val bottomNavigation = binding.contentMain.bottomNavigation
+
+        bottomNavigation.setOnItemSelectedListener { item ->
+            val destinationId = item.itemId
+
+            if (navController.currentDestination?.id == destinationId) {
+                true
+            } else {
+                val navOptions = NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setPopUpTo(R.id.FirstFragment, false)
+                    .build()
+                navController.navigate(destinationId, null, navOptions)
+                true
+            }
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            bottomNavigation.menu.findItem(
+                when (destination.id) {
+                    R.id.SecondFragment, R.id.AddItemFragment -> R.id.SecondFragment
+                    R.id.PantryFragment, R.id.AddPantryItemFragment -> R.id.PantryFragment
+                    else -> R.id.FirstFragment
+                }
+            ).isChecked = true
         }
     }
 
