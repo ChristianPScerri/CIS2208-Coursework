@@ -1,5 +1,8 @@
 package com.christian.quickcart
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -57,6 +60,24 @@ class RecipeListAdapter(
         fun bind(recipe: RecipeSuggestion) {
             binding.textviewRecipeName.text = recipe.name
             binding.textviewRecipeSource.text = recipe.sourceText
+            binding.root.setOnClickListener {
+                openRecipe(recipe)
+            }
+            binding.textviewOpenRecipe.setOnClickListener {
+                openRecipe(recipe)
+            }
+        }
+
+        /**
+         * Opens the recipe web page in the user's browser.
+         */
+        private fun openRecipe(recipe: RecipeSuggestion) {
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.sourceUrl))
+                binding.root.context.startActivity(intent)
+            } catch (exception: ActivityNotFoundException) {
+                // If no browser is available, the row simply remains on screen.
+            }
         }
     }
 }

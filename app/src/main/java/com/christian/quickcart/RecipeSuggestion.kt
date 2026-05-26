@@ -5,5 +5,6 @@ package com.christian.quickcart
  */
 data class RecipeSuggestion(
     val name: String,
-    val sourceText: String
+    val sourceText: String,
+    val sourceUrl: String
 )

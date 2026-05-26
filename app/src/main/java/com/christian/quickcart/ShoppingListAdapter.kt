@@ -1,6 +1,8 @@
 package com.christian.quickcart
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.christian.quickcart.databinding.ItemShoppingBinding
@@ -65,6 +67,7 @@ class ShoppingListAdapter(
         ) {
             binding.textviewItemName.text = item.name
             binding.textviewItemDetails.text = buildItemDetails(item)
+            showProductImage(item.imagePath)
             binding.checkboxBought.setOnCheckedChangeListener(null)
             binding.checkboxBought.isChecked = item.isBought
             binding.checkboxBought.setOnCheckedChangeListener { _, isChecked ->
@@ -83,8 +86,22 @@ class ShoppingListAdapter(
          * Builds the second line of text for a shopping item row.
          */
         private fun buildItemDetails(item: ShoppingItem): String {
-            val mainDetails = "${item.quantity} - ${item.category} - ${item.priority} priority"
+            val mainDetails = "${item.amount} x ${item.quantity} - ${item.category} - ${item.priority} priority"
             return if (item.notes.isBlank()) mainDetails else "$mainDetails - ${item.notes}"
+        }
+
+        /**
+         * Shows a thumbnail when the shopping item has a saved product image.
+         */
+        private fun showProductImage(imagePath: String) {
+            val bitmap = BitmapFactory.decodeFile(imagePath)
+
+            if (bitmap == null) {
+                binding.imageviewShoppingItem.visibility = View.GONE
+            } else {
+                binding.imageviewShoppingItem.visibility = View.VISIBLE
+                binding.imageviewShoppingItem.setImageBitmap(bitmap)
+            }
         }
     }
 }

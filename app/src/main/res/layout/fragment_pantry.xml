@@ -27,6 +27,22 @@
         android:textColor="#4D6659"
         android:textSize="14sp" />
 
+    <TextView
+        android:id="@+id/textview_pantry_expired_summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="#E8F5E9"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="6dp"
+        android:text="@string/pantry_expired_summary"
+        android:textColor="#1B5E20"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="Expired items: 0" />
+
     <EditText
         android:id="@+id/edittext_search_pantry"
         android:layout_width="match_parent"

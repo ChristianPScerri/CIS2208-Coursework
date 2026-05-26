@@ -1,5 +1,6 @@
 package com.christian.quickcart
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.christian.quickcart.databinding.FragmentPantryBinding
 import com.google.android.material.snackbar.Snackbar
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 /**
  * Pantry fragment that displays saved pantry items in a RecyclerView.
@@ -40,18 +43,23 @@ class PantryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         databaseHelper = ShoppingDatabaseHelper(requireContext())
-        pantryItems = databaseHelper.getAllPantryItems()
+        databaseHelper.seedSamplePantryItemsIfEmpty()
+        pantryItems = sortPantryItems(databaseHelper.getAllPantryItems())
 
         pantryListAdapter = PantryListAdapter(
             pantryItems,
             onEditClicked = { item ->
                 openEditPantryItemScreen(item)
             },
+            onAddExpiryClicked = { item ->
+                showAddExpiryPicker(item)
+            },
             onDeleteClicked = { item ->
                 deletePantryItem(item)
             }
         )
         binding.recyclerviewPantryItems.adapter = pantryListAdapter
+        updateExpiredSummary()
         updateEmptyState(pantryItems)
 
         binding.edittextSearchPantry.addTextChangedListener { searchText ->
@@ -66,6 +74,7 @@ class PantryFragment : Fragment() {
         super.onResume()
         if (::databaseHelper.isInitialized && ::pantryListAdapter.isInitialized) {
             pantryItems = databaseHelper.getAllPantryItems()
+            pantryItems = sortPantryItems(pantryItems)
             filterPantryItems(binding.edittextSearchPantry.text.toString())
         }
     }
@@ -79,8 +88,10 @@ class PantryFragment : Fragment() {
                 item.category.contains(searchText, ignoreCase = true)
         }
 
-        pantryListAdapter.submitItems(filteredItems)
-        updateEmptyState(filteredItems)
+        val sortedItems = sortPantryItems(filteredItems)
+        pantryListAdapter.submitItems(sortedItems)
+        updateExpiredSummary()
+        updateEmptyState(sortedItems)
     }
 
     /**
@@ -98,9 +109,86 @@ class PantryFragment : Fragment() {
      */
     private fun deletePantryItem(item: PantryItem) {
         databaseHelper.deletePantryItem(item.id)
-        pantryItems = databaseHelper.getAllPantryItems()
+        pantryItems = sortPantryItems(databaseHelper.getAllPantryItems())
         filterPantryItems(binding.edittextSearchPantry.text.toString())
         Snackbar.make(binding.root, R.string.pantry_item_deleted, Snackbar.LENGTH_SHORT).show()
+    }
+
+    /**
+     * Lets the user add an expiry date directly from a pantry row that has no date.
+     */
+    private fun showAddExpiryPicker(item: PantryItem) {
+        val today = LocalDate.now()
+
+        DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                val selectedDate = LocalDate.of(year, month + 1, dayOfMonth).toString()
+                databaseHelper.updatePantryItem(
+                    itemId = item.id,
+                    name = item.name,
+                    quantity = item.quantity,
+                    category = item.category,
+                    expiryDate = selectedDate,
+                    amount = item.amount,
+                    imagePath = item.imagePath
+                )
+                pantryItems = sortPantryItems(databaseHelper.getAllPantryItems())
+                filterPantryItems(binding.edittextSearchPantry.text.toString())
+            },
+            today.year,
+            today.monthValue - 1,
+            today.dayOfMonth
+        ).show()
+    }
+
+    /**
+     * Sorts pantry rows so expired and soonest-expiring items are easiest to notice.
+     */
+    private fun sortPantryItems(items: List<PantryItem>): List<PantryItem> {
+        return items.sortedWith(
+            compareBy<PantryItem> { expirySortGroup(it) }
+                .thenBy { parseExpiryDate(it.expiryDate) ?: LocalDate.MAX }
+                .thenBy { it.name.lowercase() }
+        )
+    }
+
+    /**
+     * Places expired rows first, dated rows next, and unknown dates last.
+     */
+    private fun expirySortGroup(item: PantryItem): Int {
+        val expiryDate = parseExpiryDate(item.expiryDate) ?: return 2
+        return if (expiryDate.isBefore(LocalDate.now())) 0 else 1
+    }
+
+    /**
+     * Reads dates stored by the pantry date picker.
+     */
+    private fun parseExpiryDate(expiryDate: String): LocalDate? {
+        return try {
+            LocalDate.parse(expiryDate)
+        } catch (exception: DateTimeParseException) {
+            null
+        }
+    }
+
+    /**
+     * Updates the expiry summary badge above the pantry search box.
+     */
+    private fun updateExpiredSummary() {
+        val expiredCount = pantryItems.count { item ->
+            parseExpiryDate(item.expiryDate)?.isBefore(LocalDate.now()) == true
+        }
+        binding.textviewPantryExpiredSummary.text =
+            getString(R.string.pantry_expired_summary, expiredCount)
+        binding.textviewPantryExpiredSummary.setTextColor(
+            if (expiredCount > 0) android.graphics.Color.WHITE
+            else android.graphics.Color.parseColor("#1B5E20")
+        )
+        binding.textviewPantryExpiredSummary.setBackgroundColor(
+            if (expiredCount > 0) android.graphics.Color.parseColor("#C62828")
+            else android.graphics.Color.parseColor("#E8F5E9")
+        )
     }
 
     /**

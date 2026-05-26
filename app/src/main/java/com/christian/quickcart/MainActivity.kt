@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.christian.quickcart.databinding.ActivityMainBinding
 
 /**
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.FirstFragment, R.id.SecondFragment, R.id.PantryFragment)
+            setOf(R.id.FirstFragment, R.id.SecondFragment, R.id.PantryFragment, R.id.RecipesFragment)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         setupBottomNavigation()
@@ -73,9 +74,15 @@ class MainActivity : AppCompatActivity() {
                 when (destination.id) {
                     R.id.SecondFragment, R.id.AddItemFragment -> R.id.SecondFragment
                     R.id.PantryFragment, R.id.AddPantryItemFragment -> R.id.PantryFragment
+                    R.id.RecipesFragment -> R.id.RecipesFragment
                     else -> R.id.FirstFragment
                 }
             ).isChecked = true
+
+            when (destination.id) {
+                R.id.AddItemFragment, R.id.AddPantryItemFragment, R.id.RecipesFragment -> binding.fab.hide()
+                else -> binding.fab.show()
+            }
         }
     }
 
@@ -92,9 +99,23 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                showAboutDialog()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * Shows a short explanation of the prototype and the Android technologies it demonstrates.
+     */
+    private fun showAboutDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.about_title)
+            .setMessage(R.string.about_message)
+            .setPositiveButton(R.string.about_close, null)
+            .show()
     }
 
     /**

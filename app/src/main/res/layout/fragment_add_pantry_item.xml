@@ -3,85 +3,175 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7FAF7"
+    android:background="@color/quickcart_background"
+    android:fillViewport="true"
     tools:context=".AddPantryItemFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:paddingStart="@dimen/form_screen_padding"
+        android:paddingTop="18dp"
+        android:paddingEnd="@dimen/form_screen_padding"
+        android:paddingBottom="96dp">
 
         <TextView
-            android:id="@+id/textview_add_pantry_title"
+            style="@style/QuickCart.FormSectionTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_pantry_item_title"
-            android:textColor="#193326"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:text="@string/item_details_section" />
+
+        <TextView
+            style="@style/QuickCart.FormLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_gap"
+            android:text="@string/pantry_item_name_hint" />
 
         <EditText
             android:id="@+id/edittext_pantry_name"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:background="#FFFFFF"
+            style="@style/QuickCart.FormEditText"
             android:hint="@string/pantry_item_name_hint"
-            android:inputType="textCapWords"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:singleLine="true"
-            android:textColor="#26352D"
-            android:textColorHint="#6C7B72" />
+            android:inputType="textCapWords" />
+
+        <TextView
+            style="@style/QuickCart.FormLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_gap"
+            android:text="@string/pantry_quantity_hint" />
 
         <EditText
             android:id="@+id/edittext_pantry_quantity"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:background="#FFFFFF"
+            style="@style/QuickCart.FormEditText"
             android:hint="@string/pantry_quantity_hint"
-            android:inputType="textCapWords"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:singleLine="true"
-            android:textColor="#26352D"
-            android:textColorHint="#6C7B72" />
+            android:inputType="textCapWords" />
+
+        <TextView
+            style="@style/QuickCart.FormLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_gap"
+            android:text="@string/pantry_amount_hint" />
 
         <EditText
-            android:id="@+id/edittext_pantry_category"
+            android:id="@+id/edittext_pantry_amount"
+            style="@style/QuickCart.FormEditText"
+            android:hint="@string/pantry_amount_hint"
+            android:inputType="number" />
+
+        <TextView
+            style="@style/QuickCart.FormSectionTitle"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:background="#FFFFFF"
-            android:hint="@string/pantry_category_hint"
-            android:inputType="textCapWords"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:singleLine="true"
-            android:textColor="#26352D"
-            android:textColorHint="#6C7B72" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_section_gap"
+            android:text="@string/category_date_section" />
+
+        <TextView
+            style="@style/QuickCart.FormLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_gap"
+            android:text="@string/pantry_category_hint" />
+
+        <FrameLayout
+            style="@style/QuickCart.DropdownContainer">
+
+            <Spinner
+                android:id="@+id/spinner_pantry_category"
+                style="@style/QuickCart.FormDropdown"
+                android:prompt="@string/pantry_category_hint" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center_vertical"
+                android:contentDescription="@string/pantry_category_hint"
+                android:src="@drawable/ic_arrow_drop_down" />
+        </FrameLayout>
+
+        <TextView
+            style="@style/QuickCart.FormLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_gap"
+            android:text="@string/pantry_expiry_hint" />
 
         <EditText
             android:id="@+id/edittext_pantry_expiry"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:background="#FFFFFF"
+            style="@style/QuickCart.FormEditText"
+            android:focusable="false"
             android:hint="@string/pantry_expiry_hint"
-            android:inputType="text"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:singleLine="true"
-            android:textColor="#26352D"
-            android:textColorHint="#6C7B72" />
+            android:inputType="none" />
+
+        <TextView
+            style="@style/QuickCart.FormSectionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/form_section_gap"
+            android:text="@string/product_image" />
+
+        <FrameLayout
+            android:id="@+id/container_pantry_image"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/image_placeholder_background"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/imageview_pantry_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/product_image"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:id="@+id/layout_pantry_image_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:contentDescription="@string/product_image"
+                    android:src="@drawable/ic_photo_placeholder" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/image_empty_title"
+                    android:textColor="@color/quickcart_primary_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="@string/image_empty_helper"
+                    android:textColor="@color/quickcart_muted"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/button_choose_pantry_image"
+            style="@style/QuickCart.SecondaryButton"
+            android:layout_marginTop="10dp"
+            android:text="@string/choose_product_image" />
 
         <Button
             android:id="@+id/button_save_pantry_item"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
+            style="@style/QuickCart.PrimaryButton"
+            android:layout_marginTop="@dimen/form_section_gap"
             android:text="@string/save_pantry_item" />
 
     </LinearLayout>

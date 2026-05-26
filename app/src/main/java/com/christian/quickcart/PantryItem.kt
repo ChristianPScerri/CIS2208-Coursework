@@ -8,5 +8,7 @@ data class PantryItem(
     val name: String,
     val quantity: String,
     val category: String,
-    val expiryDate: String
+    val expiryDate: String,
+    val amount: Int = 1,
+    val imagePath: String = ""
 )

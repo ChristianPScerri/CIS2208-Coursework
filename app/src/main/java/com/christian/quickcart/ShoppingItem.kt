@@ -10,5 +10,7 @@ data class ShoppingItem(
     val category: String,
     val priority: String,
     val notes: String,
+    val amount: Int = 1,
+    val imagePath: String = "",
     var isBought: Boolean = false
 )

@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="quickcart_background">#F7FAF7</color>
+    <color name="quickcart_primary">#2F7D4B</color>
+    <color name="quickcart_primary_dark">#193326</color>
+    <color name="quickcart_text">#26352D</color>
+    <color name="quickcart_muted">#6C7B72</color>
+    <color name="quickcart_border">#C9D8CF</color>
+    <color name="quickcart_field">#FFFFFF</color>
+    <color name="quickcart_field_subtle">#F1F5F2</color>
 </resources>

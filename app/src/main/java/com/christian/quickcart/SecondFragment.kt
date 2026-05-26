@@ -50,7 +50,11 @@ class SecondFragment : Fragment() {
         shoppingListAdapter = ShoppingListAdapter(
             shoppingItems,
             onBoughtChanged = { item, isBought ->
-                databaseHelper.updateBoughtStatus(item.id, isBought)
+                if (isBought) {
+                    moveBoughtItemToPantry(item)
+                } else {
+                    databaseHelper.updateBoughtStatus(item.id, false)
+                }
             },
             onEditClicked = { item ->
                 openEditItemScreen(item)
@@ -116,6 +120,19 @@ class SecondFragment : Fragment() {
     }
 
     /**
+     * Copies a bought shopping item into the pantry so purchased products become stock at home.
+     */
+    private fun moveBoughtItemToPantry(item: ShoppingItem) {
+        databaseHelper.moveShoppingItemToPantry(
+            item = item,
+            expiryDate = getString(R.string.expiry_default)
+        )
+        shoppingItems = databaseHelper.getAllShoppingItems()
+        filterShoppingItems(binding.edittextSearchItems.text.toString())
+        Snackbar.make(binding.root, R.string.pantry_item_added_from_shopping, Snackbar.LENGTH_SHORT).show()
+    }
+
+    /**
      * Shares the saved shopping list through Android's share sheet.
      */
     private fun shareShoppingList() {
@@ -128,7 +145,7 @@ class SecondFragment : Fragment() {
 
         val listText = items.joinToString(separator = "\n") { item ->
             val boughtText = if (item.isBought) "Bought" else "Needed"
-            "- ${item.name} (${item.quantity}, ${item.category}, $boughtText)"
+            "- ${item.name} (${item.amount} x ${item.quantity}, ${item.category}, $boughtText)"
         }
 
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
