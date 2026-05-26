@@ -24,6 +24,7 @@ class RecipesFragment : Fragment() {
     private lateinit var recipeListAdapter: RecipeListAdapter
     private var pantryIngredientNames = listOf<String>()
     private val selectedIngredientNames = mutableSetOf<String>()
+    private var latestRecipeRequestId = 0
 
     /**
      * Creates the recipes screen view using generated view binding.
@@ -125,10 +126,17 @@ class RecipesFragment : Fragment() {
         }
 
         binding.textviewRecipeStatus.setText(R.string.recipes_loading)
+        binding.buttonFetchRecipes.isEnabled = false
+        val requestId = ++latestRecipeRequestId
 
         Thread {
             val recipes = loadRecipesForIngredients(selectedIngredients)
             activity?.runOnUiThread {
+                if (_binding == null || requestId != latestRecipeRequestId) {
+                    return@runOnUiThread
+                }
+
+                binding.buttonFetchRecipes.isEnabled = pantryIngredientNames.isNotEmpty()
                 if (recipes == null) {
                     binding.textviewRecipeStatus.setText(R.string.recipes_error)
                     recipeListAdapter.submitRecipes(emptyList())
@@ -317,6 +325,7 @@ class RecipesFragment : Fragment() {
      */
     override fun onDestroyView() {
         super.onDestroyView()
+        latestRecipeRequestId++
         _binding = null
     }
 

@@ -1,6 +1,7 @@
 package com.christian.quickcart
 
 import android.app.DatePickerDialog
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.christian.quickcart.databinding.FragmentAddPantryItemBinding
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
+import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -32,7 +35,19 @@ class AddPantryItemFragment : Fragment() {
         ActivityResultContracts.GetContent()
     ) { imageUri ->
         imageUri?.let {
+            if (_binding == null) return@registerForActivityResult
             selectedImagePath = saveProductImage(it)
+            showProductImage(selectedImagePath)
+            Snackbar.make(binding.root, R.string.product_image_selected, Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private val cameraImageLauncher = registerForActivityResult(
+        ActivityResultContracts.TakePicturePreview()
+    ) { bitmap ->
+        bitmap?.let {
+            if (_binding == null) return@registerForActivityResult
+            selectedImagePath = saveCameraImage(it)
             showProductImage(selectedImagePath)
             Snackbar.make(binding.root, R.string.product_image_selected, Snackbar.LENGTH_SHORT).show()
         }
@@ -69,10 +84,10 @@ class AddPantryItemFragment : Fragment() {
             showExpiryDatePicker()
         }
         binding.buttonChoosePantryImage.setOnClickListener {
-            productImageLauncher.launch("image/*")
+            showImageSourceDialog()
         }
         binding.containerPantryImage.setOnClickListener {
-            productImageLauncher.launch("image/*")
+            showImageSourceDialog()
         }
 
         binding.buttonSavePantryItem.setOnClickListener {
@@ -97,6 +112,26 @@ class AddPantryItemFragment : Fragment() {
     }
 
     /**
+     * Lets the user choose between taking a new camera photo and selecting one from gallery storage.
+     */
+    private fun showImageSourceDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.receipt_image_title)
+            .setItems(
+                arrayOf(
+                    getString(R.string.take_camera_photo),
+                    getString(R.string.choose_gallery_image)
+                )
+            ) { _, which ->
+                when (which) {
+                    CAMERA_OPTION_INDEX -> cameraImageLauncher.launch(null)
+                    GALLERY_OPTION_INDEX -> productImageLauncher.launch("image/*")
+                }
+            }
+            .show()
+    }
+
+    /**
      * Copies the chosen product image into private storage and returns its file path.
      */
     private fun saveProductImage(imageUri: android.net.Uri): String {
@@ -105,6 +140,17 @@ class AddPantryItemFragment : Fragment() {
             imageFile.outputStream().use { outputStream ->
                 inputStream.copyTo(outputStream)
             }
+        }
+        return imageFile.absolutePath
+    }
+
+    /**
+     * Saves a camera bitmap into private storage and returns its file path.
+     */
+    private fun saveCameraImage(bitmap: Bitmap): String {
+        val imageFile = File(requireContext().filesDir, "pantry_item_${System.currentTimeMillis()}.jpg")
+        FileOutputStream(imageFile).use { outputStream ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, outputStream)
         }
         return imageFile.absolutePath
     }
@@ -232,5 +278,8 @@ class AddPantryItemFragment : Fragment() {
         const val ARG_PANTRY_ITEM_ID = "pantry_item_id"
         private const val NO_ITEM_ID = -1L
         private const val DEFAULT_AMOUNT = 1
+        private const val CAMERA_OPTION_INDEX = 0
+        private const val GALLERY_OPTION_INDEX = 1
+        private const val IMAGE_QUALITY = 90
     }
 }
