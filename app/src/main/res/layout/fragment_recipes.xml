@@ -69,6 +69,13 @@
         android:textColor="#4D6659"
         android:textSize="14sp" />
 
+    <Button
+        android:id="@+id/button_add_pantry_from_recipes"
+        style="@style/QuickCart.PrimaryButton"
+        android:layout_marginTop="12dp"
+        android:text="@string/add_pantry_items"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_recipes"
         android:layout_width="match_parent"

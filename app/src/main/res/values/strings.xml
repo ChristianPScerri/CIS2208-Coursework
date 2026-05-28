@@ -21,6 +21,7 @@
     <string name="shopping_list_title">Active Shopping List</string>
     <string name="shopping_list_search_hint">Search items</string>
     <string name="shopping_list_empty">No matching shopping items</string>
+    <string name="add_shopping_item">Add Shopping Item</string>
     <string name="shopping_list_sample_note">Items are saved locally on this device</string>
     <string name="add_item_fragment_label">Add Shopping Item</string>
     <string name="add_item_title">Add Shopping Item</string>
@@ -90,6 +91,7 @@
     <string name="fetch_recipes">Get Recipe Suggestions</string>
     <string name="recipes_empty">No recipes loaded yet</string>
     <string name="recipes_no_pantry">Add pantry items first so QuickCart can search for recipes.</string>
+    <string name="add_pantry_items">Add Pantry Items</string>
     <string name="recipes_loading">Loading recipe suggestions...</string>
     <string name="recipes_error">Could not load recipes. Check the connection and try again.</string>
     <string name="recipes_showing">Showing recipes using %1$s</string>

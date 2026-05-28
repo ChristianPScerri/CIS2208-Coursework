@@ -68,6 +68,14 @@
         android:textColor="#4D6659"
         android:visibility="gone" />
 
+    <Button
+        android:id="@+id/button_empty_add_pantry_item"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/add_pantry_item_title"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_pantry_items"
         android:layout_width="match_parent"

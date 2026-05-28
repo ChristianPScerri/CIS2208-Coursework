@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.christian.quickcart.databinding.FragmentRecipesBinding
 import com.google.android.material.chip.Chip
 import org.json.JSONObject
@@ -56,6 +57,9 @@ class RecipesFragment : Fragment() {
         binding.edittextSearchRecipeIngredients.addTextChangedListener { searchText ->
             showIngredientChips(searchText.toString())
         }
+        binding.buttonAddPantryFromRecipes.setOnClickListener {
+            findNavController().navigate(R.id.AddPantryItemFragment)
+        }
     }
 
     /**
@@ -83,6 +87,8 @@ class RecipesFragment : Fragment() {
         if (pantryIngredientNames.isEmpty()) {
             binding.textviewRecipeStatus.setText(R.string.recipes_no_pantry)
         }
+        binding.buttonAddPantryFromRecipes.visibility =
+            if (pantryIngredientNames.isEmpty()) View.VISIBLE else View.GONE
     }
 
     /**

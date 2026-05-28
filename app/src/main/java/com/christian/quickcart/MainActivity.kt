@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         setupBottomNavigation()
 
-        binding.fab.setOnClickListener {
+        binding.contentMain.fab.setOnClickListener {
             when (navController.currentDestination?.id) {
                 R.id.PantryFragment -> navController.navigate(R.id.AddPantryItemFragment)
                 R.id.AddItemFragment, R.id.AddPantryItemFragment, R.id.RecipesFragment -> Unit
@@ -80,8 +80,13 @@ class MainActivity : AppCompatActivity() {
             ).isChecked = true
 
             when (destination.id) {
-                R.id.AddItemFragment, R.id.AddPantryItemFragment, R.id.RecipesFragment -> binding.fab.hide()
-                else -> binding.fab.show()
+                R.id.AddItemFragment, R.id.AddPantryItemFragment -> bottomNavigation.visibility = android.view.View.GONE
+                else -> bottomNavigation.visibility = android.view.View.VISIBLE
+            }
+
+            when (destination.id) {
+                R.id.SecondFragment, R.id.PantryFragment -> binding.contentMain.fab.show()
+                else -> binding.contentMain.fab.hide()
             }
         }
     }

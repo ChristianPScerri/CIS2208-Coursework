@@ -72,6 +72,10 @@ class SecondFragment : Fragment() {
         binding.buttonShareShoppingList.setOnClickListener {
             shareShoppingList()
         }
+
+        binding.buttonEmptyAddShoppingItem.setOnClickListener {
+            findNavController().navigate(R.id.AddItemFragment)
+        }
     }
 
     /**
@@ -95,8 +99,9 @@ class SecondFragment : Fragment() {
         }
 
         shoppingListAdapter.submitItems(filteredItems)
-        binding.textviewEmptyList.visibility =
-            if (filteredItems.isEmpty()) View.VISIBLE else View.GONE
+        val emptyVisibility = if (filteredItems.isEmpty()) View.VISIBLE else View.GONE
+        binding.textviewEmptyList.visibility = emptyVisibility
+        binding.buttonEmptyAddShoppingItem.visibility = emptyVisibility
     }
 
     /**

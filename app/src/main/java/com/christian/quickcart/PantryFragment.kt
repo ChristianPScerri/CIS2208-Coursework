@@ -65,6 +65,10 @@ class PantryFragment : Fragment() {
         binding.edittextSearchPantry.addTextChangedListener { searchText ->
             filterPantryItems(searchText.toString())
         }
+
+        binding.buttonEmptyAddPantryItem.setOnClickListener {
+            findNavController().navigate(R.id.AddPantryItemFragment)
+        }
     }
 
     /**
@@ -195,7 +199,9 @@ class PantryFragment : Fragment() {
      * Shows an empty state when there are no pantry rows to display.
      */
     private fun updateEmptyState(items: List<PantryItem>) {
-        binding.textviewEmptyPantry.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+        val emptyVisibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+        binding.textviewEmptyPantry.visibility = emptyVisibility
+        binding.buttonEmptyAddPantryItem.visibility = emptyVisibility
     }
 
     /**
