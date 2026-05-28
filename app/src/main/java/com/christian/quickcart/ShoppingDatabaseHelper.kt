@@ -177,12 +177,11 @@ class ShoppingDatabaseHelper(context: Context) :
             category = category,
             priority = priority,
             notes = notes,
-            imagePath = imagePath,
             excludedItemId = NO_ITEM_ID
         )
 
         if (existingItem != null) {
-            updateShoppingAmount(existingItem.id, existingItem.amount + amount.coerceAtLeast(1))
+            updateShoppingStack(existingItem, amount, imagePath)
             return existingItem.id
         }
 
@@ -288,12 +287,11 @@ class ShoppingDatabaseHelper(context: Context) :
             category = category,
             priority = priority,
             notes = notes,
-            imagePath = imagePath,
             excludedItemId = itemId
         )
 
         if (existingItem != null) {
-            updateShoppingAmount(existingItem.id, existingItem.amount + amount.coerceAtLeast(1))
+            updateShoppingStack(existingItem, amount, imagePath)
             deleteShoppingItem(itemId)
             return
         }
@@ -343,12 +341,11 @@ class ShoppingDatabaseHelper(context: Context) :
             quantity = quantity,
             category = category,
             expiryDate = expiryDate,
-            imagePath = imagePath,
             excludedItemId = NO_ITEM_ID
         )
 
         if (existingItem != null) {
-            updatePantryAmount(existingItem.id, existingItem.amount + amount.coerceAtLeast(1))
+            updatePantryStack(existingItem, amount, imagePath)
             return existingItem.id
         }
 
@@ -446,12 +443,11 @@ class ShoppingDatabaseHelper(context: Context) :
             quantity = quantity,
             category = category,
             expiryDate = expiryDate,
-            imagePath = imagePath,
             excludedItemId = itemId
         )
 
         if (existingItem != null) {
-            updatePantryAmount(existingItem.id, existingItem.amount + amount.coerceAtLeast(1))
+            updatePantryStack(existingItem, amount, imagePath)
             deletePantryItem(itemId)
             return
         }
@@ -516,32 +512,36 @@ class ShoppingDatabaseHelper(context: Context) :
     }
 
     /**
-     * Updates the stacked amount for a shopping item row.
+     * Updates the stacked amount and keeps a useful image when duplicate shopping items merge.
      */
-    private fun updateShoppingAmount(itemId: Long, amount: Int) {
+    private fun updateShoppingStack(existingItem: ShoppingItem, addedAmount: Int, newImagePath: String) {
+        val imagePathToKeep = existingItem.imagePath.ifBlank { newImagePath }
         val values = ContentValues().apply {
-            put(COLUMN_AMOUNT, amount.coerceAtLeast(1))
+            put(COLUMN_AMOUNT, existingItem.amount + addedAmount.coerceAtLeast(1))
+            put(COLUMN_IMAGE_PATH, imagePathToKeep)
         }
         writableDatabase.update(
             TABLE_SHOPPING_ITEMS,
             values,
             "$COLUMN_ID = ?",
-            arrayOf(itemId.toString())
+            arrayOf(existingItem.id.toString())
         )
     }
 
     /**
-     * Updates the stacked amount for a pantry item row.
+     * Updates the stacked amount and keeps a useful image when duplicate pantry items merge.
      */
-    private fun updatePantryAmount(itemId: Long, amount: Int) {
+    private fun updatePantryStack(existingItem: PantryItem, addedAmount: Int, newImagePath: String) {
+        val imagePathToKeep = existingItem.imagePath.ifBlank { newImagePath }
         val values = ContentValues().apply {
-            put(COLUMN_AMOUNT, amount.coerceAtLeast(1))
+            put(COLUMN_AMOUNT, existingItem.amount + addedAmount.coerceAtLeast(1))
+            put(COLUMN_IMAGE_PATH, imagePathToKeep)
         }
         writableDatabase.update(
             TABLE_PANTRY_ITEMS,
             values,
             "$COLUMN_ID = ?",
-            arrayOf(itemId.toString())
+            arrayOf(existingItem.id.toString())
         )
     }
 
@@ -554,7 +554,6 @@ class ShoppingDatabaseHelper(context: Context) :
         category: String,
         priority: String,
         notes: String,
-        imagePath: String,
         excludedItemId: Long
     ): ShoppingItem? {
         return getAllShoppingItems().firstOrNull { item ->
@@ -563,8 +562,7 @@ class ShoppingDatabaseHelper(context: Context) :
                 item.quantity.equals(quantity, ignoreCase = true) &&
                 item.category == category &&
                 item.priority == priority &&
-                item.notes == notes &&
-                item.imagePath == imagePath
+                item.notes == notes
         }
     }
 
@@ -576,7 +574,6 @@ class ShoppingDatabaseHelper(context: Context) :
         quantity: String,
         category: String,
         expiryDate: String,
-        imagePath: String,
         excludedItemId: Long
     ): PantryItem? {
         return getAllPantryItems().firstOrNull { item ->
@@ -584,8 +581,7 @@ class ShoppingDatabaseHelper(context: Context) :
                 item.name.equals(name, ignoreCase = true) &&
                 item.quantity.equals(quantity, ignoreCase = true) &&
                 item.category == category &&
-                item.expiryDate == expiryDate &&
-                item.imagePath == imagePath
+                item.expiryDate == expiryDate
         }
     }
 
